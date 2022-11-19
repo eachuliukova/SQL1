@@ -1,0 +1,96 @@
+-- Соединение таблиц
+
+--1)
+--select id, first_name, last_name, department_id from 
+--employees.employee e left join employees.department_employee de on
+--	e.id = de.employee_id
+--where hire_date > '1999-04-20' and from_date <= current_date and to_date >= current_date
+
+--2)
+--select e.id, first_name, last_name, amount, dept_name from
+--employees.employee e left join employees.salary s on
+--	e.id = s.employee_id
+--left join employees.department_employee de on
+--	e.id = de.employee_id
+--left join employees.department d on
+--	de.department_id = d.id
+--where hire_date > '1999-04-20' and s.from_date <= current_date and s.to_date >= current_date and
+--								de.from_date <= current_date and de.to_date >= current_date
+
+--3)
+--select id, first_name, last_name, amount, title, department_id from 
+--employees.employee e left join employees.salary s on
+--	e.id = s.employee_id
+--left join employees.title t on
+--	e.id = t.employee_id
+--left join employees.department_employee de on
+--	e.id = de.employee_id
+--where hire_date > '1999-04-20' and s.from_date <= current_date and s.to_date >= current_date and
+--t.from_date <= current_date and t.to_date >= current_date and 
+--de.from_date <= current_date and de.to_date >= current_date
+
+--4)
+--select id, first_name, last_name, department_id, amount from
+--employees.employee e left join employees.department_employee de on
+--	e.id = de.employee_id
+--left join employees.salary s on
+--	e.id = s.employee_id
+--where hire_date > '1999-04-20' and de.from_date <= current_date and de.to_date >= current_date
+--and s.from_date <= current_date and s.to_date >= current_date and 
+--s.amount > (select avg(amount) from employees.salary where from_date <= current_date and to_date >= current_date)
+
+--5)
+--select id, first_name, last_name from
+--employees.employee e left join employees.department_manager dm on
+--	e.id = dm.employee_id
+--left join employees.department_employee de on
+--	e.id = de.employee_id
+--where de.department_id = dm.department_id and de.from_date <= current_date
+--and de.to_date >= current_date 
+--and de.from_date <= current_date and de.to_date >= current_date
+
+--6)
+--select id, first_name, last_name from 
+--employees.employee e left join employees.department_manager dm on
+--	e.id = dm.employee_id
+	
+--7) 
+--select id, first_name, last_name, buf.c 
+--from employees.employee e 
+--left join (select employee_id, count(1) c 
+--		  from employees.title
+--		  group by employee_id) as buf on e.id = buf.employee_id 
+--where buf.c = (select count(1) c
+--			  from employees.title
+--			  group by employee_id
+--			  	order by c desc limit 1)
+
+--8)
+--select department_id, max(amount), min(amount), avg(amount) from 
+--employees.department_employee de left join employees.salary s on
+--	de.employee_id = s.employee_id
+--where s.from_date <= '1999-04-20' and s.to_date >= '1999-04-20'
+--group by department_id
+
+--9)
+--select department_id, title from 
+--employees.department_employee de left join employees.title t on
+--	de.employee_id = t.employee_id
+--where de.from_date <= current_date and de.to_date >= current_date and 
+--t.from_date <= current_date and t.to_date >= current_date
+
+--10)
+-- select e.id, 
+--        e.first_name, 
+--  	   e.last_name
+-- from employees.employee AS e
+-- left join employees.department_employee AS de ON de.employee_id = e.id
+--                                         and de.to_date >= current_date
+-- left join employees.salary s on s.employee_id = e.id
+--                          and s.to_date >= current_date
+-- left join (select dm.department_id department_id, s.amount
+--       from employees.department_manager dm
+--       join employees.salary s  on s.employee_id = dm.employee_id
+--       where dm.to_date >= current_date 
+--         and s.to_date >= current_date) AS ma ON ma.department_id = de.department_id
+-- WHERE s.amount >= ma.amount

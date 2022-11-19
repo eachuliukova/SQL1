@@ -1,0 +1,22 @@
+-------join-- 
+
+--select id, first_name, last_name 
+--from employees.employee left join employees.department_employee 
+--on employees.employee.id = employees.department_employee.employee_id
+--where hire_date > '1999-04-20' and from_date <= current_date and to_date >= current_date ;
+
+
+select id, first_name, last_name, amount, department_id, title
+from employees.employee a
+left join employees.department_employee de
+on a.id = de.employee_id
+left join employees.salary s
+on a.id = s.employee_id
+left join employees.title t
+on a.id = t.employee_id
+where de.from_date <= current_date and de.to_date >= current_date and
+t.from_date <= current_date and t.to_date >= current_date and
+s.from_date <= current_date and s.to_date >= current_date;
+
+
+
